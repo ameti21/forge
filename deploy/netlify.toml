@@ -1,3 +1,0 @@
-[build]
-  command = "python3 scripts/build_site.py --out build/site"
-  publish = "build/site"

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #09090b;
+  --surface: #18181b;
+  --border: #27272a;
+}
+
+body {
+  background: var(--bg);
+  color: #fafafa;
+}
+
+::selection {
+  background: rgba(109, 93, 252, 0.4);
+  color: #fff;
+}
