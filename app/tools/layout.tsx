@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
+import ConditionalUserButton from "../conditional-user-button";
 
 export default function ToolsLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +12,7 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
             </Link>
             <Link href="/dashboard" className="text-sm text-zinc-400 hover:text-white transition">← Dashboard</Link>
           </div>
-          <UserButton />
+          <ConditionalUserButton />
         </div>
       </nav>
       {children}

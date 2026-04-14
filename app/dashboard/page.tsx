@@ -1,5 +1,4 @@
-import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
+import ConditionalUserButton from "../conditional-user-button";
 import Link from "next/link";
 
 const tools = [
@@ -12,8 +11,17 @@ const tools = [
   { name: "Learning Platform", icon: "🎓", href: "/tools/learn", desc: "Personalized learning paths" },
 ];
 
+async function getUser() {
+  try {
+    const { currentUser } = await import("@clerk/nextjs/server");
+    return await currentUser();
+  } catch {
+    return null;
+  }
+}
+
 export default async function Dashboard() {
-  const user = await currentUser();
+  const user = await getUser();
 
   return (
     <div className="min-h-screen bg-zinc-950">
@@ -24,7 +32,7 @@ export default async function Dashboard() {
           </Link>
           <div className="flex items-center gap-4">
             <Link href="/pricing" className="text-sm text-zinc-400 hover:text-white transition">Upgrade</Link>
-            <UserButton />
+            <ConditionalUserButton />
           </div>
         </div>
       </nav>
