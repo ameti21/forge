@@ -1,0 +1,8 @@
+# .gitignore
+build/
+out/
+__pycache__/
+*.pyc
+.env
+.vercel
+node_modules/
