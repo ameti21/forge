@@ -4,5 +4,6 @@ out/
 __pycache__/
 *.pyc
 .env
-.vercel
+.env.*
+.vercel/
 node_modules/
