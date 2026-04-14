@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import Providers from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,12 +10,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClerkProvider appearance={{ variables: { colorPrimary: "#6366f1" }, elements: { card: "bg-zinc-900 border-zinc-800", formButtonPrimary: "bg-indigo-600 hover:bg-indigo-500" } }}>
-      <html lang="en" className="dark">
-        <body className="min-h-screen bg-zinc-950 text-zinc-50 antialiased">
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark">
+      <body className="min-h-screen bg-zinc-950 text-zinc-50 antialiased">
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }
