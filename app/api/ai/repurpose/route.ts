@@ -8,9 +8,9 @@ export async function POST(req: Request) {
   }
 
   const groqKey = process.env.GROQ_API_KEY;
-  if (!groqKey) {
+  if (!groqKey || groqKey === "gsk_placeholder") {
     return NextResponse.json(
-      { error: "AI service not configured. Add GROQ_API_KEY to environment variables." },
+      { error: "AI service not configured yet. The site owner needs to add a Groq API key." },
       { status: 503 }
     );
   }
@@ -37,7 +37,12 @@ export async function POST(req: Request) {
   });
 
   if (!response.ok) {
-    return NextResponse.json({ error: "AI service error" }, { status: 502 });
+    const errBody = await response.text().catch(() => "");
+    console.error("Groq API error:", response.status, errBody);
+    return NextResponse.json(
+      { error: response.status === 401 ? "Invalid Groq API key. Please check your GROQ_API_KEY." : "AI service temporarily unavailable. Please try again." },
+      { status: 502 }
+    );
   }
 
   const data = await response.json();
