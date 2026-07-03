@@ -6,7 +6,7 @@ const tools = [
   { name: "AI Content Repurposer", icon: "🤖", href: "/tools/ai-content", desc: "Repurpose content with Groq AI" },
   { name: "Portfolio & CV Builder", icon: "💼", href: "/tools/portfolio", desc: "Build portfolios and CVs" },
   { name: "Business Dashboards", icon: "📊", href: "/tools/dashboard-builder", desc: "Upload CSV → live charts" },
-  { name: "Template Marketplace", icon: "🎨", href: "/tools/templates", desc: "100+ responsive templates" },
+  { name: "Template Marketplace", icon: "🎨", href: "/tools/templates", desc: "Professionally designed templates" },
   { name: "Form & Quiz Builder", icon: "📝", href: "/tools/forms", desc: "Build forms with logic" },
   { name: "Learning Platform", icon: "🎓", href: "/tools/learn", desc: "Personalized learning paths" },
 ];
