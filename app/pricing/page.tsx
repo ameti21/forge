@@ -7,40 +7,39 @@ const tiers = [
     name: "Starter",
     price: 9,
     desc: "InvoiceForge only",
-    priceId: "price_starter",
+    tier: "starter",
     features: ["1 tool — InvoiceForge", "Unlimited invoices", "PDF export", "Email support"],
   },
   {
     name: "Pro",
     price: 19,
     desc: "AI Content + 3 tools",
-    priceId: "price_pro",
+    tier: "pro",
     features: ["4 tools included", "Groq AI integration", "Priority support", "Custom branding"],
     popular: true,
   },
   {
     name: "Empire",
     price: 49,
-    desc: "ALL 7 tools — the money-maker",
-    priceId: "price_empire",
+    desc: "ALL 7 tools",
+    tier: "empire",
     features: [
       "All 7 tools unlocked",
-      "Unlimited AI credits",
+      "Higher AI usage limits",
       "White-label option",
       "1-on-1 onboarding call",
-      "API access",
       "Early access to new tools",
     ],
   },
 ];
 
 export default function PricingPage() {
-  const handleCheckout = async (priceId: string) => {
+  const handleCheckout = async (tier: string) => {
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ tier }),
       });
       const data = await res.json();
       if (data.url) {
@@ -101,7 +100,7 @@ export default function PricingPage() {
                 ))}
               </ul>
               <button
-                onClick={() => handleCheckout(tier.priceId)}
+                onClick={() => handleCheckout(tier.tier)}
                 className={`mt-8 block w-full rounded-xl py-3 text-center font-semibold transition cursor-pointer ${
                   tier.popular
                     ? "bg-gradient-to-r from-forge-500 to-indigo-500 text-white hover:shadow-lg hover:shadow-forge-500/25"
