@@ -11,8 +11,12 @@ function isProtectedPath(pathname: string) {
 
 export default async function middleware(request: NextRequest) {
   const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-  if (!clerkKey || !clerkKey.startsWith("pk_")) {
-    // Fail closed in production: without a valid Clerk key nobody can be
+  // Clerk needs both the publishable and the secret key; with only one of
+  // them clerkMiddleware would throw at request time.
+  const clerkConfigured =
+    !!clerkKey && clerkKey.startsWith("pk_") && !!process.env.CLERK_SECRET_KEY;
+  if (!clerkConfigured) {
+    // Fail closed in production: without a valid Clerk key pair nobody can be
     // authenticated, so protected routes must not be reachable.
     if (process.env.NODE_ENV === "production") {
       const { pathname } = request.nextUrl;

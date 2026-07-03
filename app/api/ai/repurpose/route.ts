@@ -6,12 +6,29 @@ const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 
 // Simple in-memory rate limiter, per user. Resets on server restart and is
 // per-instance, but is enough to stop casual abuse of the AI endpoint.
+const MAX_TRACKED_USERS = 5000;
 const rateBuckets = new Map<string, { count: number; windowStart: number }>();
+
+function pruneExpiredBuckets(now: number) {
+  for (const [id, bucket] of rateBuckets) {
+    if (now - bucket.windowStart >= RATE_WINDOW_MS) {
+      rateBuckets.delete(id);
+    }
+  }
+}
 
 function isRateLimited(userId: string): boolean {
   const now = Date.now();
   const bucket = rateBuckets.get(userId);
   if (!bucket || now - bucket.windowStart >= RATE_WINDOW_MS) {
+    if (rateBuckets.size >= MAX_TRACKED_USERS) {
+      pruneExpiredBuckets(now);
+      // Fail closed for new users while the map is saturated so the map
+      // cannot grow without bound under a high-cardinality attack.
+      if (rateBuckets.size >= MAX_TRACKED_USERS && !rateBuckets.has(userId)) {
+        return true;
+      }
+    }
     rateBuckets.set(userId, { count: 1, windowStart: now });
     return false;
   }
@@ -21,8 +38,12 @@ function isRateLimited(userId: string): boolean {
 
 export async function POST(req: Request) {
   const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  // Clerk is only usable when both halves of the key pair are present;
+  // a publishable key without the secret would make auth() throw.
+  const clerkConfigured =
+    !!clerkKey && clerkKey.startsWith("pk_") && !!process.env.CLERK_SECRET_KEY;
   let userId: string | null = null;
-  if (clerkKey && clerkKey.startsWith("pk_")) {
+  if (clerkConfigured) {
     ({ userId } = await auth());
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
