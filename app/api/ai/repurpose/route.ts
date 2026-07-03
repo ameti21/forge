@@ -1,7 +1,52 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+
+const RATE_LIMIT = 10; // requests per window
+const RATE_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+// Simple in-memory rate limiter, per user. Resets on server restart and is
+// per-instance, but is enough to stop casual abuse of the AI endpoint.
+const rateBuckets = new Map<string, { count: number; windowStart: number }>();
+
+function isRateLimited(userId: string): boolean {
+  const now = Date.now();
+  const bucket = rateBuckets.get(userId);
+  if (!bucket || now - bucket.windowStart >= RATE_WINDOW_MS) {
+    rateBuckets.set(userId, { count: 1, windowStart: now });
+    return false;
+  }
+  bucket.count += 1;
+  return bucket.count > RATE_LIMIT;
+}
 
 export async function POST(req: Request) {
-  const { text } = await req.json();
+  const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  let userId: string | null = null;
+  if (clerkKey && clerkKey.startsWith("pk_")) {
+    ({ userId } = await auth());
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+  } else if (process.env.NODE_ENV === "production") {
+    // Fail closed: no auth configured means nobody is authenticated.
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } else {
+    userId = "dev-user";
+  }
+
+  if (isRateLimited(userId)) {
+    return NextResponse.json(
+      { error: `Rate limit exceeded. You can make ${RATE_LIMIT} requests per hour — please try again later.` },
+      { status: 429 }
+    );
+  }
+
+  let text: unknown;
+  try {
+    ({ text } = await req.json());
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
 
   if (!text || typeof text !== "string" || text.length > 10000) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });

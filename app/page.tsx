@@ -31,7 +31,7 @@ const tools = [
   },
   {
     name: "Template Marketplace",
-    desc: "100+ responsive site templates. Preview, customize, download. Built with modern CSS.",
+    desc: "Professionally designed site templates. Preview, customize, download. Built with modern CSS.",
     icon: "🎨",
     href: "/tools/templates",
     color: "from-cyan-600 to-blue-600",
@@ -55,7 +55,7 @@ const tools = [
 const tiers = [
   { name: "Starter", price: 9, desc: "InvoiceForge only", features: ["1 tool", "Unlimited invoices", "PDF export", "Email support"] },
   { name: "Pro", price: 19, desc: "AI Content + 3 tools", features: ["4 tools", "Groq AI included", "Priority support", "Custom branding"], popular: true },
-  { name: "Empire", price: 49, desc: "ALL 7 tools", features: ["All 7 tools", "Unlimited AI credits", "White-label option", "1-on-1 onboarding", "API access"] },
+  { name: "Empire", price: 49, desc: "ALL 7 tools", features: ["All 7 tools", "Higher AI usage limits", "White-label option", "1-on-1 onboarding"] },
 ];
 
 export default function Home() {

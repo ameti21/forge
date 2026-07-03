@@ -22,7 +22,7 @@ export default function TemplatesPage() {
         <h1 className="text-4xl font-bold flex items-center gap-3">
           <span className="text-3xl">🎨</span> Template Marketplace
         </h1>
-        <p className="mt-2 text-zinc-400">Browse 100+ responsive site templates. Preview, customize, and download.</p>
+        <p className="mt-2 text-zinc-400">Browse professionally designed site templates. Preview, customize, and download.</p>
       </div>
 
       {/* Categories */}
