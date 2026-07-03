@@ -3,19 +3,28 @@ import Stripe from "stripe";
 import { auth } from "@clerk/nextjs/server";
 
 // Server-side allowlist: clients send a tier name, never a raw Stripe price ID.
+// A switch avoids prototype-chain lookups on user-supplied strings.
 function getPriceIdForTier(tier: string): string | undefined {
-  const priceIds: Record<string, string | undefined> = {
-    starter: process.env.STRIPE_PRICE_STARTER,
-    pro: process.env.STRIPE_PRICE_PRO,
-    empire: process.env.STRIPE_PRICE_EMPIRE,
-  };
-  return priceIds[tier];
+  switch (tier) {
+    case "starter":
+      return process.env.STRIPE_PRICE_STARTER;
+    case "pro":
+      return process.env.STRIPE_PRICE_PRO;
+    case "empire":
+      return process.env.STRIPE_PRICE_EMPIRE;
+    default:
+      return undefined;
+  }
 }
 
 export async function POST(req: Request) {
   const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  // Clerk is only usable when both halves of the key pair are present;
+  // a publishable key without the secret would make auth() throw.
+  const clerkConfigured =
+    !!clerkKey && clerkKey.startsWith("pk_") && !!process.env.CLERK_SECRET_KEY;
   let userId: string | null = null;
-  if (clerkKey && clerkKey.startsWith("pk_")) {
+  if (clerkConfigured) {
     ({ userId } = await auth());
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -51,7 +60,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unknown pricing tier" }, { status: 400 });
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://forge.ameti.one";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || new URL(req.url).origin;
 
   try {
     const stripe = new Stripe(stripeKey);

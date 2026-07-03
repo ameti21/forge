@@ -42,11 +42,14 @@ export default function PricingPage() {
         body: JSON.stringify({ tier }),
       });
       const data = await res.json();
-      if (data.url) {
+      if (res.ok && data.url) {
         window.location.href = data.url;
+      } else {
+        alert(data.error || "Failed to start checkout. Please try again.");
       }
     } catch (err) {
       console.error("Checkout error:", err);
+      alert("Something went wrong starting checkout. Please try again.");
     }
   };
 
