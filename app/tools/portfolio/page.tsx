@@ -102,7 +102,7 @@ export default function PortfolioPage() {
               <h2 className="text-lg font-bold border-b border-zinc-200 pb-1 mb-3">Skills</h2>
               <div className="flex flex-wrap gap-2">
                 {profile.skills.split(",").map((s, i) => (
-                  <span key={i} className="rounded-full bg-indigo-50 px-3 py-1 text-sm text-indigo-700">{s.trim()}</span>
+                  <span key={i} className="rounded-full bg-indigo-50 px-3={i} className="rounded-full bg-indigo-50 px-3 py-1 text-sm text-indigo-700">{s.trim()}</span>
                 ))}
               </div>
             </div>
@@ -126,14 +126,13 @@ export default function PortfolioPage() {
               {profile.projects.filter((p) => p.name).map((proj, i) => (
                 <div key={i} className="mb-3">
                   <p className="font-semibold">{proj.name}</p>
-                  <p className="text-sm text-zinc-600">{proj.description}</p>
-                  {proj.link && <a href={proj.link} className="text-sm text-indigo-600 hover:underline">{proj.link}</a>}
+                  <p className="text-sm text-zinc <a href={proj.link} className="text-sm text-indigo-600 hover:underline">{proj.link}</a>}
                 </div>
               ))}
             </div>
           )}
 
-          <p className="mt-10 text-center text-xs text-zinc-400">Built with Forge — forge.ameti.one</p>
+          <p className="mt-10 text-center text-xs text-zinc-400">Built with Forge — forge.masterengine.ai</p>
         </div>
       )}
     </div>
