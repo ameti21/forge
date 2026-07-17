@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { absoluteUrl } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: absoluteUrl("/") },
+};
 
 const tools = [
   {
@@ -74,6 +80,7 @@ export default function Home() {
         </Link>
         <div className="flex items-center gap-6">
           <Link href="#tools" className="text-sm text-zinc-400 hover:text-white transition">Tools</Link>
+          <Link href="/guides" className="text-sm text-zinc-400 hover:text-white transition">Guides</Link>
           <Link href="#pricing" className="text-sm text-zinc-400 hover:text-white transition">Pricing</Link>
           <Link
             href="/sign-in"
@@ -233,7 +240,11 @@ export default function Home() {
       <footer className="relative z-10 border-t border-zinc-800 py-12">
         <div className="mx-auto max-w-7xl px-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <p className="text-sm text-zinc-500">© 2026 Forge by Jet Ameti. All rights reserved.</p>
-          <div className="flex gap-6 text-sm text-zinc-500">
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-zinc-500">
+            <Link href="/guides" className="hover:text-white transition">Guides</Link>
+            <Link href="/invoice-generator" className="hover:text-white transition">Invoice Generator</Link>
+            <Link href="/ai-content-repurposer" className="hover:text-white transition">AI Repurposer</Link>
+            <Link href="/portfolio-builder" className="hover:text-white transition">Portfolio Builder</Link>
             <Link href="/pricing" className="hover:text-white transition">Pricing</Link>
             <Link href="/dashboard" className="hover:text-white transition">Dashboard</Link>
             <a href="https://github.com/ameti21/forge" className="hover:text-white transition">GitHub</a>
