@@ -1,13 +1,11 @@
 /**
  * Canonical site URL for metadata, sitemap, robots, and JSON-LD.
  *
- * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://forge.ameti.one).
- * The fallback below is a placeholder and MUST be replaced with the real
- * production domain before launch, otherwise canonical URLs and the
- * sitemap will point at the wrong host.
+ * NEXT_PUBLIC_SITE_URL may override this value for previews or alternate
+ * environments. The production fallback is Forge's canonical hostname.
  */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://forge.ameti.one"
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://forge.masterengine.ai"
 ).replace(/\/$/, "");
 
 export const SITE_NAME = "Forge";
