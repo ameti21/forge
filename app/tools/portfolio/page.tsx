@@ -133,7 +133,7 @@ export default function PortfolioPage() {
             </div>
           )}
 
-          <p className="mt-10 text-center text-xs text-zinc-400">Built with Forge — forge.ameti.one</p>
+          <p className="mt-10 text-center text-xs text-zinc-400">Built with Forge — forge.masterengine.ai</p>
         </div>
       )}
     </div>
