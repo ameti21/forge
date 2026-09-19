@@ -4,17 +4,16 @@ import { toolPages } from "@/lib/tool-pages";
 import { absoluteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-
+  // Omit lastModified where no content revision date is tracked. A rebuild
+  // does not mean the page content changed.
   const core: MetadataRoute.Sitemap = [
-    { url: absoluteUrl("/"), lastModified, changeFrequency: "weekly", priority: 1 },
-    { url: absoluteUrl("/pricing"), lastModified, changeFrequency: "monthly", priority: 0.9 },
-    { url: absoluteUrl("/guides"), lastModified, changeFrequency: "weekly", priority: 0.8 },
+    { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
+    { url: absoluteUrl("/pricing"), changeFrequency: "monthly", priority: 0.9 },
+    { url: absoluteUrl("/guides"), changeFrequency: "weekly", priority: 0.8 },
   ];
 
   const tools: MetadataRoute.Sitemap = toolPages.map((tool) => ({
     url: absoluteUrl(`/${tool.slug}`),
-    lastModified,
     changeFrequency: "monthly",
     priority: 0.8,
   }));
