@@ -28,6 +28,7 @@
   "overrides": {
     "next": {
       "postcss": "$postcss"
-    }
+    },
+    "source-map-js": "1.2.4"
   }
 }
